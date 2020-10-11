@@ -35,7 +35,7 @@ public class InteractLever : MonoBehaviour
         if (collision.gameObject.CompareTag("Player"))
         {
             isInRange = true;
-            Debug.Log("Player now in range");
+          //  Debug.Log("Player now in range");
 
         }
     }
@@ -45,7 +45,7 @@ public class InteractLever : MonoBehaviour
         if (collision.gameObject.CompareTag("Player")) 
         {
             isInRange = false;
-            Debug.Log("Player now not range");
+           // Debug.Log("Player now not range");
 
         }
     }

@@ -12,7 +12,7 @@ public class LeverScript : MonoBehaviour
         if (!isTouched)
         {
             isTouched = true;
-            Debug.Log("The lever has moved!");
+            //Debug.Log("The lever has moved!");
             an.SetBool("isTouched", isTouched);
         }
     }

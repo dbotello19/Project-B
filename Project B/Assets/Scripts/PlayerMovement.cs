@@ -6,20 +6,34 @@ using UnityEngine.EventSystems;
 
 public class PlayerMovement : MonoBehaviour
 {
-    float movespeed;
+    //Player's body variable
     public Rigidbody2D rb;
-    bool isFacingRight;
+
+    //Movement variables
     Vector2 movement;
+    float movespeed;
+
+    //Animations variables
     Animator anima;
+    bool isFacingRight;    
     bool standRight;
     bool standUp;
     bool standDown;
     bool Stand;
 
+    //Stamina Bar variables
+    float Stamina;
+    public GameObject staminaBar;
 
 
-    private void Start()
+
+
+    void Start()
     {
+        //Hide Cursor
+        Cursor.visible = false;
+
+        //setting Animations
         anima = gameObject.GetComponent<Animator>();
         Stand = true;
         standRight = true;
@@ -27,29 +41,27 @@ public class PlayerMovement : MonoBehaviour
         standDown = false;
         isFacingRight = true;
 
+        //setting Stamina
+        Stamina = 100;
+
     }
+
 
 
     private void LateUpdate()
     {
-        //Input
+        //Inputing X and Y
         movement.x = Input.GetAxisRaw("Horizontal");
         movement.y = Input.GetAxisRaw("Vertical");
+        
 
-        if(Input.GetKey(KeyCode.LeftShift))
-        {
-            movespeed = 4f;
-        }
-        else
-        {
-            movespeed = 2.5f;
-        }
 
-       
+
+        //setting moving position
         rb.MovePosition(rb.position + movement * movespeed * Time.fixedDeltaTime);
 
 
-
+        //Animation
         if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow))
         {
             isFacingRight = true;
@@ -110,12 +122,55 @@ public class PlayerMovement : MonoBehaviour
                 anima.Play("StandDownAnima");
             }
         }
-        
+
+        //Hide stamina bar when it is not used
+        if(staminaBar.transform.localScale.x >= 1)
+        {
+            staminaBar.SetActive(false);
+        }
+        else
+        {
+            staminaBar.SetActive(true);
+        }
+        //Setting running speed
+
+        if (Input.GetKey(KeyCode.LeftShift))
+            {
+
+            if (staminaBar.transform.localScale.x > 0)
+                    movespeed = 5f;
+                else
+                    movespeed = 3f;
+            }
+            else
+            {
+                movespeed = 3f;
+            }
 
 
-        
+        //Tracking stamina
+        if (Input.GetKey(KeyCode.LeftShift))
+        {
+
+            if (staminaBar.transform.localScale.x >= 0)
+            {
+                if (Stamina >= 0)
+                    Stamina -= .5f * Time.deltaTime;
+                staminaBar.transform.localScale -= new Vector3(Stamina * .002f, 0, 0) * Time.deltaTime;
+            }
+        }
+        else if (!Input.GetKey(KeyCode.LeftShift))
+        {
+            if (staminaBar.transform.localScale.x < 1)
+            {
+                if (Stamina < 100)
+                    Stamina += .5f * Time.deltaTime;
+                staminaBar.transform.localScale += new Vector3(Stamina * .0015f, 0, 0) * Time.deltaTime;
+            }
+        }
+
+
     }
-
 
     // Flip Player over the x-axis
     protected void Flip()
